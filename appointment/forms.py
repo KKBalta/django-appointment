@@ -224,3 +224,14 @@ class ServiceForm(forms.ModelForm):
                                      attrs={'class': 'form-control'}),
             'background_color': forms.TextInput(attrs={'class': 'form-control', 'type': 'color', 'value': '#000000'}),
         }
+
+
+class StaffProfileForm(forms.ModelForm):
+    class Meta:
+        model = StaffMember
+        fields = ['title', 'profile_image', 'services_offered']
+        widgets = {
+            'profile_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'services_offered': forms.SelectMultiple(attrs={'class': 'form-control'}),
+        }

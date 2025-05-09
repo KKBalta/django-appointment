@@ -1,0 +1,129 @@
+<!-- templates/barbershop/home.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home - Your Barbershop{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-5 bg-dark text-white">
+    <div class="container text-center py-5">
+        <h1 class="display-4">Quality Haircuts & Styling</h1>
+        <p class="lead">Experience the best barber service in town</p>
+        <a href="/en/appointment/" class="btn btn-primary btn-lg mt-3">Book an Appointment</a>
+    </div>
+</div>
+
+<!-- Featured Services -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Our Services</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for service in services %}
+            <div class="col">
+                <div class="card h-100 service-card">
+                    <div class="card-body text-center">
+                        <h3 class="card-title h5">{{ service.name }}</h3>
+                        <p class="card-text">{{ service.price }}{{ service.currency_icon }}</p>
+                        <a href="/en/appointment/request/{{ service.id }}/" class="btn btn-outline-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>No services available at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="/en/barbershop/services/" class="btn btn-dark">View All Services</a>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light" id="barbers">
+    <div class="container">
+        <h2 class="text-center mb-2">Meet Our Expert Barbers</h2>
+        <p class="text-center text-muted mb-5">Skilled professionals ready to give you the perfect look</p>
+        
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for staff in staff_members %}
+            <div class="col">
+                <div class="card h-100 staff-card border-0 shadow-sm">
+                    <div class="position-relative">
+                        {% if staff.profile_image %}
+                        <img src="{{ staff.profile_image.url }}" class="card-img-top staff-img" alt="{{ staff.get_staff_member_name }}">
+                        {% else %}
+                        <img src="{% static 'images/default-barber.jpg' %}" class="card-img-top staff-img" alt="{{ staff.get_staff_member_name }}">
+                        {% endif %}
+                        <div class="staff-specialty">
+                            {% if staff.title %}
+                                <span>{{ staff.title }}</span>
+                            {% else %}
+                                <span>Master Barber</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="card-title h5 mb-3">{{ staff.get_staff_member_name }}</h3>
+                        
+                        <div class="staff-services mb-3">
+                            {% with services=staff.get_services_offered|slice:":3" %}
+                                {% for service in services %}
+                                <span class="badge rounded-pill bg-light text-dark me-1 mb-1">{{ service.name }}</span>
+                                {% empty %}
+                                <span class="badge rounded-pill bg-light text-dark">All Services</span>
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                        
+                        {% with services=staff.get_services_offered %}
+                          {% if services.exists %}
+                            <a href="{% url 'appointment:appointment_request' services.first.id %}?staff_member={{ staff.id }}" class="btn btn-primary">Book with {{ staff.get_staff_member_first_name }}</a>
+                          {% else %}
+                            <a href="/en/appointment/" class="btn btn-primary">Book with {{ staff.get_staff_member_first_name }}</a>
+                          {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i> Our staff information is currently being updated.
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{% url 'barbershop:staff_listing' %}" class="btn btn-outline-dark">Meet Our Full Team</a>
+        </div>
+    </div>
+</section>
+
+
+<!-- Online Booking Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <img src="{% static 'images/appointment-booking.jpg' %}" alt="Online Booking" class="img-fluid rounded">
+            </div>
+            <div class="col-lg-6">
+                <h2>Easy Online Booking</h2>
+                <p class="lead">Book your next haircut or style with ease using our online appointment system.</p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check-circle text-primary me-2"></i> Select your desired service</li>
+                    <li><i class="bi bi-check-circle text-primary me-2"></i> Choose your preferred barber</li>
+                    <li><i class="bi bi-check-circle text-primary me-2"></i> Pick a convenient date and time</li>
+                    <li><i class="bi bi-check-circle text-primary me-2"></i> Receive confirmation by email</li>
+                </ul>
+                <a href="/en/barbershop/services/" class="btn btn-primary mt-3">Book Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Additional content like testimonials, gallery preview, etc. -->
+{% endblock %}

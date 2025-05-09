@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Us - Your Barbershop{% endblock %}
+{% block description %}Learn about our barbershop's history, our skilled team, and our commitment to quality service.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-5 bg-dark text-white">
+    <div class="container text-center py-4">
+        <h1 class="display-4">About Our Barbershop</h1>
+        <p class="lead">A tradition of excellence since 2010</p>
+    </div>
+</div>
+
+<!-- Our Story -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <img src="{% static 'images/barbershop-interior.jpg' %}" alt="Barbershop Interior" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-lg-6">
+                <h2 class="mb-4">Our Story</h2>
+                <p>Founded in 2010, Your Barbershop began with a simple mission: to provide exceptional haircuts and grooming services in a welcoming, classic barbershop atmosphere.</p>
+                <p>What started as a small, two-chair operation has grown into one of the city's most respected establishments, known for attention to detail and customer satisfaction.</p>
+                <p>We combine traditional barbering techniques with modern styles to give our clients the perfect look for any occasion.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Values -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Values</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="display-4 text-primary mb-3">
+                            <i class="bi bi-scissors"></i>
+                        </div>
+                        <h3 class="card-title h4">Craftsmanship</h3>
+                        <p class="card-text">We take pride in our technical skills and attention to detail, ensuring every client leaves looking their best.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="display-4 text-primary mb-3">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h3 class="card-title h4">Community</h3>
+                        <p class="card-text">We're more than just a business - we're a gathering place where clients become friends and part of our extended family.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="display-4 text-primary mb-3">
+                            <i class="bi bi-stars"></i>
+                        </div>
+                        <h3 class="card-title h4">Excellence</h3>
+                        <p class="card-text">We're committed to delivering exceptional service and staying current with the latest trends and techniques.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Meet the Founder -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 order-lg-2 mb-4 mb-lg-0">
+                <img src="{% static 'images/founder.jpg' %}" alt="Barbershop Founder" class="img-fluid rounded-circle shadow mx-auto d-block" style="max-width: 300px;">
+            </div>
+            <div class="col-lg-7 order-lg-1">
+                <h2 class="mb-4">Meet the Founder</h2>
+                <p class="lead">John Smith, Master Barber</p>
+                <p>With over 20 years of experience in the industry, John founded Your Barbershop with a vision to create a space where traditional barbering meets modern style.</p>
+                <p>After training in some of the country's top barbershops and working internationally, he brought his skills and passion back to his hometown to build a business focused on quality and community.</p>
+                <p>"Every client deserves our full attention and our best work, every time. That's the foundation of everything we do." - John Smith</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">Experience Our Service for Yourself</h2>
+        <p class="lead mb-4">Join our community of satisfied clients and discover why we're the preferred choice for men's grooming.</p>
+        <a href="/en/appointment/" class="btn btn-light btn-lg">Book an Appointment</a>
+    </div>
+</section>
+{% endblock %}

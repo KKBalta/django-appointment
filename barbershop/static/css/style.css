@@ -1,0 +1,27 @@
+.staff-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.staff-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.staff-img {
+    height: 300px;
+    object-fit: cover;
+}
+
+.staff-specialty {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: var(--bs-primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-top-left-radius: 0.375rem;
+}
+
+.staff-services .badge {
+    font-weight: normal;
+}

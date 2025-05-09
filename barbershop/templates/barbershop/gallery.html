@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Gallery - Your Barbershop{% endblock %}
+{% block description %}Browse our gallery of haircuts, styles, and barbershop moments.{% endblock %}
+
+{% block customCSS %}
+<style>
+    .gallery-item {
+        margin-bottom: 30px;
+        overflow: hidden;
+        border-radius: 5px;
+    }
+    
+    .gallery-item img {
+        transition: transform 0.5s ease;
+    }
+    
+    .gallery-item:hover img {
+        transform: scale(1.05);
+    }
+    
+    .gallery-item-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 15px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    
+    .gallery-item:hover .gallery-item-overlay {
+        opacity: 1;
+    }
+    
+    .gallery-filter {
+        margin-bottom: 30px;
+    }
+    
+    .gallery-filter .btn {
+        margin-right: 5px;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-5 bg-dark text-white">
+    <div class="container text-center py-4">
+        <h1 class="display-4">Our Gallery</h1>
+        <p class="lead">Showcasing our finest work and salon environment</p>
+    </div>
+</div>
+
+<!-- Gallery Section -->
+<section class="py-5">
+    <div class="container">
+        <!-- Gallery Filter -->
+        <div class="gallery-filter text-center">
+            <button class="btn btn-outline-dark active" data-filter="*">All</button>
+            <button class="btn btn-outline-dark" data-filter=".haircuts">Haircuts</button>
+            <button class="btn btn-outline-dark" data-filter=".beard">Beard Trims</button>
+            <button class="btn btn-outline-dark" data-filter=".shop">Shop Interior</button>
+            <button class="btn btn-outline-dark" data-filter=".events">Events</button>
+        </div>
+        
+        <!-- Gallery Grid -->
+        <div class="row g-4" id="gallery-grid">
+            <!-- Haircut Images -->
+            {% for i in '123456'|make_list %}
+            <div class="col-md-6 col-lg-4 gallery-item haircuts">
+                <div class="position-relative">
+                    <img src="{% static 'images/gallery/haircut-'|add:i|add:'.jpg' %}" alt="Haircut Style" class="img-fluid rounded shadow">
+                    <div class="gallery-item-overlay">
+                        <h5>Modern Cut</h5>
+                        <p class="mb-0">A contemporary style perfect for the modern gentleman.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- Beard Images -->
+            {% for i in '123'|make_list %}
+            <div class="col-md-6 col-lg-4 gallery-item beard">
+                <div class="position-relative">
+                    <img src="{% static 'images/gallery/beard-'|add:i|add:'.jpg' %}" alt="Beard Trim" class="img-fluid rounded shadow">
+                    <div class="gallery-item-overlay">
+                        <h5>Precision Beard Trim</h5>
+                        <p class="mb-0">Expert beard shaping and maintenance.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- Shop Interior Images -->
+            {% for i in '123'|make_list %}
+            <div class="col-md-6 col-lg-4 gallery-item shop">
+                <div class="position-relative">
+                    <img src="{% static 'images/gallery/shop-'|add:i|add:'.jpg' %}" alt="Barbershop Interior" class="img-fluid rounded shadow">
+                    <div class="gallery-item-overlay">
+                        <h5>Our Space</h5>
+                        <p class="mb-0">A comfortable, stylish environment for our clients.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- Events Images -->
+            {% for i in '12'|make_list %}
+            <div class="col-md-6 col-lg-4 gallery-item events">
+                <div class="position-relative">
+                    <img src="{% static 'images/gallery/event-'|add:i|add:'.jpg' %}" alt="Barbershop Event" class="img-fluid rounded shadow">
+                    <div class="gallery-item-overlay">
+                        <h5>Community Events</h5>
+                        <p class="mb-0">Engaging with our local community through special events.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Note about placeholder images -->
+        <div class="alert alert-info mt-5 text-center">
+            <i class="bi bi-info-circle me-2"></i> Note: The images above are placeholders. Replace with your actual gallery images.
+        </div>
+    </div>
+</section>
+
+<!-- Client Transformations -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Before & After Transformations</h2>
+        
+        <div class="row g-4">
+            {% for i in '123'|make_list %}
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="row g-0">
+                        <div class="col-6">
+                            <img src="{% static 'images/gallery/before-'|add:i|add:'.jpg' %}" alt="Before Haircut" class="img-fluid rounded-start" style="height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="col-6">
+                            <img src="{% static 'images/gallery/after-'|add:i|add:'.jpg' %}" alt="After Haircut" class="img-fluid rounded-end" style="height: 100%; object-fit: cover;">
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Complete Transformation</h5>
+                        <p class="card-text">A fresh cut and styled beard make all the difference.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Instagram Feed Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Follow Us on Instagram</h2>
+        <p class="text-center text-muted mb-5">Stay updated with our latest styles, promotions, and events</p>
+        
+        <div class="row g-3">
+            {% for i in '123456789'|make_list %}
+            <div class="col-6 col-md-4 col-lg-2">
+                <a href="https://instagram.com/yourbarbershop" target="_blank" class="d-block">
+                    <img src="{% static 'images/gallery/insta-'|add:i|add:'.jpg' %}" alt="Instagram Post" class="img-fluid rounded">
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="https://instagram.com/yourbarbershop" target="_blank" class="btn btn-outline-dark">
+                <i class="bi bi-instagram me-2"></i> @yourbarbershop
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 bg-dark text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready for Your Transformation?</h2>
+        <p class="lead mb-4">Let our expert barbers help you achieve the look you desire.</p>
+        <a href="/en/appointment/" class="btn btn-primary btn-lg">Book Now</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block customJS %}
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Isotope
+        var grid = document.querySelector('#gallery-grid');
+        var iso = new Isotope(grid, {
+            itemSelector: '.gallery-item',
+            layoutMode: 'fitRows'
+        });
+        
+        // Filter items on button click
+        document.querySelectorAll('.gallery-filter .btn').forEach(button => {
+            button.addEventListener('click', function() {
+                var filterValue = this.getAttribute('data-filter');
+                
+                // Remove active class from all buttons
+                document.querySelectorAll('.gallery-filter .btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to current button
+                this.classList.add('active');
+                
+                if (filterValue === '*') {
+                    iso.arrange({filter: '*'});
+                } else {
+                    iso.arrange({filter: filterValue});
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

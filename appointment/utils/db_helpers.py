@@ -421,11 +421,11 @@ def get_all_appointments() -> list:
 
 
 def get_all_staff_members() -> list:
-    """Get all staff members from the database.
+    """Get all active staff members from the database.
 
-    :return: QuerySet, all staff members
+    :return: QuerySet, all active staff members
     """
-    return StaffMember.objects.all()
+    return StaffMember.objects.all()  # This now only returns active staff members due to our custom manager
 
 
 def get_appointment_buffer_time():
@@ -569,11 +569,24 @@ def get_staff_member_buffer_time(staff_member: StaffMember, date: datetime.date)
     return staff_member.appointment_buffer_time or buffer_minutes
 
 
-def get_staff_member_by_user_id(user_id):
-    """Return a staff member by their user ID."""
+def get_staff_member_by_user_id(user_id=None):
+    """Get a staff member by its user ID.
+
+    :param user_id: The user's ID
+    :return: The staff member with the specified user ID or None if no staff member with the specified user ID exists.
+    """
     try:
+        # First try to get active staff member
         return StaffMember.objects.get(user_id=user_id)
     except StaffMember.DoesNotExist:
+        try:
+            # If not found, check if there's an inactive (soft deleted) one
+            inactive_staff = StaffMember.all_objects.filter(user_id=user_id, is_active=False).first()
+            if inactive_staff:
+                # If found but inactive, just return None as we don't want to use inactive staff
+                return None
+        except Exception:
+            pass
         return None
 
 

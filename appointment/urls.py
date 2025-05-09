@@ -19,12 +19,15 @@ from appointment.views_admin import (
     delete_working_hours, display_appointment, email_change_verification_code, fetch_service_list_for_staff,
     fetch_staff_list, get_service_list, get_user_appointments, is_user_staff_admin, make_superuser_staff_member,
     remove_staff_member, remove_superuser_staff_member, update_appt_date_time, update_appt_min_info, update_day_off,
-    update_personal_info, update_working_hours, user_profile, validate_appointment_date
+    update_personal_info, update_working_hours, user_profile, validate_appointment_date, dashboard,restore_staff_member
 )
 
 app_name = 'appointment'
 
 admin_urlpatterns = [
+    # Dashboard - main entry point for admin
+    path('', dashboard, name='dashboard'),
+    
     # display the calendar with the events
     path('appointments/<str:response_type>/', get_user_appointments, name='get_user_event_type'),
     path('appointments/', get_user_appointments, name='get_user_appointments'),
@@ -80,6 +83,7 @@ admin_urlpatterns = [
 
     # delete appointment
     path('delete-appointment/<int:appointment_id>/', delete_appointment, name='delete_appointment'),
+    path('restore-staff-member/<int:staff_user_id>/', restore_staff_member, name='restore_staff_member'),
 ]
 
 ajax_urlpatterns = [
@@ -115,3 +119,4 @@ urlpatterns = [
     path('ajax/', include(ajax_urlpatterns)),
     path('app-admin/', include(admin_urlpatterns)),
 ]
+

@@ -30,11 +30,20 @@ ensures a smoother experience for both staff members and superusers.
 - Updated the JavaScript code in `staff_index.js` to include new checks and functions for better management of user
   roles and permissions.
 
+### Staff Member Management Improvements
+
+- Implemented soft delete functionality for staff members to ensure calendar functionality remains intact when staff are removed
+- Added the ability to reactivate previously deactivated staff members
+- Updated the staff list view to display active and inactive staff members with clear status indicators
+- Added proper error handling for cases where a user attempts to use features requiring an active staff member profile
+
 ## Bug Fixes 🐛
 
 - Fixed an issue where users without a `StaffMember` instance could attempt actions they were not permitted to, such as
   creating appointments.
 - Addressed a bug where the absence of services offered by a staff member led to unhandled exceptions.
+- Fixed critical error that would cause calendar functionality to break when staff members were permanently deleted
+- Modified staff member removal process to use soft deletion to preserve data integrity and appointment history
 
 ## Improvements 📈
 

@@ -49,6 +49,7 @@ from .utils.date_time import convert_str_to_date
 from .utils.error_codes import ErrorCode
 from .utils.ics_utils import generate_ics_file
 from .utils.json_context import get_generic_context_with_extra, json_response
+from appointment.decorators import require_user_authenticated
 
 CLIENT_MODEL = get_user_model()
 
@@ -595,3 +596,29 @@ def confirm_reschedule(request, id_request):
     client_name = Appointment.objects.get(appointment_request=ar).client.get_full_name()
     notify_admin_about_reschedule(reschedule_history, ar, client_name)
     return redirect('appointment:default_thank_you', appointment_id=ar.appointment.id)
+
+
+@require_user_authenticated
+@require_ajax
+def is_user_staff_admin(request):
+    """
+    Check if the current user is a staff admin (has a staff member record)
+    Now also checks if the staff member is active
+    """
+    try:
+        # First check if staff member exists and is active
+        StaffMember.objects.get(user=request.user)
+        return json_response(_("User is a staff member."), 
+                            custom_data={"is_staff_admin": True})
+    except StaffMember.DoesNotExist:
+        # Check if there's an inactive staff member
+        try:
+            inactive_staff = StaffMember.all_objects.get(user=request.user, is_active=False)
+            if inactive_staff:
+                return json_response(_("User's staff member profile has been deactivated. Please contact the administrator."),
+                                    custom_data={"is_staff_admin": False})
+        except StaffMember.DoesNotExist:
+            pass
+        
+        return json_response(_("User is not a staff member."), 
+                            custom_data={"is_staff_admin": False})

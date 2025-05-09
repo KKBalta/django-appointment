@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Portal - Your Barbershop{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-5">Staff Portal</h1>
+    
+    {% if user.is_authenticated %}
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <h2 class="h4">Welcome, {{ user.first_name }}</h2>
+                        <p class="text-muted">Access your appointment dashboard and manage your schedule</p>
+                        <a href="/en/appointment/app-admin/" class="btn btn-primary btn-lg mt-3">Go to Appointment Dashboard</a>
+                    </div>
+                </div>
+                
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-calendar3 fs-1 text-primary mb-3"></i>
+                                <h3 class="card-title h5">View Appointments</h3>
+                                <p class="card-text small">Check your upcoming appointments</p>
+                                <a href="/en/appointment/app-admin/appointments/" class="btn btn-outline-primary btn-sm">Open Calendar</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-clock-history fs-1 text-primary mb-3"></i>
+                                <h3 class="card-title h5">Working Hours</h3>
+                                <p class="card-text small">Manage your availability</p>
+                                <a href="/en/appointment/app-admin/user-profile/" class="btn btn-outline-primary btn-sm">Update Hours</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-calendar-x fs-1 text-primary mb-3"></i>
+                                <h3 class="card-title h5">Days Off</h3>
+                                <p class="card-text small">Manage your time off</p>
+                                <a href="/en/appointment/app-admin/user-profile/" class="btn btn-outline-primary btn-sm">Manage Days Off</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h2 class="h4">Staff Login Required</h2>
+                        <p>Please log in to access the staff portal and appointment management system.</p>
+                        <a href="/en/accounts/login/?next=/en/barbershop/staff/" class="btn btn-primary">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

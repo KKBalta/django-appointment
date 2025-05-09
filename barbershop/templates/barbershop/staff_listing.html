@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<!-- Staff Listing Header -->
+<div class="py-5 bg-dark text-white">
+    <div class="container text-center py-3">
+        <h1 class="display-4">Our Expert Barbers</h1>
+        <p class="lead">Meet the skilled professionals behind our excellent service</p>
+    </div>
+</div>
+
+<!-- Staff Members -->
+<section class="py-5">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for staff in staff_members %}
+            <div class="col">
+                <div class="card h-100 staff-card border-0 shadow-sm">
+                    <div class="position-relative">
+                        {% if staff.profile_image %}
+                        <img src="{{ staff.profile_image.url }}" class="card-img-top staff-img" alt="{{ staff.get_staff_member_name }}">
+                        {% else %}
+                        <img src="{% static 'images/default-barber.jpg' %}" class="card-img-top staff-img" alt="{{ staff.get_staff_member_name }}">
+                        {% endif %}
+                        <div class="staff-specialty">
+                            {% if staff.title %}
+                                <span>{{ staff.title }}</span>
+                            {% else %}
+                                <span>Master Barber</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="card-title h5 mb-3">{{ staff.get_staff_member_name }}</h3>
+                        
+                        <div class="staff-services mb-3">
+                            {% for service in staff.get_services_offered %}
+                            <span class="badge rounded-pill bg-light text-dark me-1 mb-1">{{ service.name }}</span>
+                            {% empty %}
+                            <span class="badge rounded-pill bg-light text-dark">All Services</span>
+                            {% endfor %}
+                        </div>
+                        
+                        <a href="{% url 'appointment:staff_request_appointment' staff.id %}" class="btn btn-primary">Book with {{ staff.get_staff_member_first_name }}</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i> Our staff information is currently being updated.
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

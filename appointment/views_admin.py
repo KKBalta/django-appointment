@@ -15,6 +15,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
+from django.contrib.admin.views.decorators import staff_member_required
 
 from appointment.decorators import (
     require_ajax, require_staff_or_superuser, require_superuser, require_user_authenticated)
@@ -441,8 +442,15 @@ def make_superuser_staff_member(request):
 @require_user_authenticated
 @require_superuser
 def remove_superuser_staff_member(request):
-    user = request.user
-    StaffMember.objects.filter(user=user).delete()
+    """Remove staff member status from a superuser."""
+    try:
+        staff_member = StaffMember.objects.get(user=request.user)
+        # Soft delete instead of permanently deleting
+        staff_member.soft_delete()
+        messages.success(request, _("Staff member removed successfully!"))
+    except StaffMember.DoesNotExist:
+        messages.error(request, _("You are not a staff member!"))
+
     return redirect('appointment:user_profile')
 
 
@@ -497,13 +505,18 @@ def delete_service(request, service_id):
 @require_user_authenticated
 @require_superuser
 def remove_staff_member(request, staff_user_id):
-    staff_member = get_object_or_404(StaffMember, user_id=staff_user_id)
-    staff_member.delete()
-    user = get_user_model().objects.get(pk=staff_user_id)
-    if not user.is_superuser and user.is_staff:
-        user.is_staff = False
-        user.save()
-    messages.success(request, _("Staff member deleted successfully!"))
+    """
+    Remove staff member status from a user.
+    Instead of deleting, this now soft deletes.
+    """
+    try:
+        staff_member = StaffMember.objects.get(user_id=staff_user_id)
+        # Soft delete instead of permanently deleting
+        staff_member.soft_delete()
+        messages.success(request, _("Staff member removed successfully!"))
+    except StaffMember.DoesNotExist:
+        messages.error(request, _("Staff member does not exist!"))
+    
     return redirect('appointment:user_profile')
 
 
@@ -566,3 +579,41 @@ def is_user_staff_admin(request):
         if not user.is_superuser:
             return json_response(_("User is not a staff member."), custom_data={'is_staff_admin': False})
         return json_response(_("User is a superuser."), custom_data={'is_staff_admin': True})
+
+
+@require_user_authenticated
+@require_staff_or_superuser
+def dashboard(request):
+    """
+    Renders the main admin dashboard showing an overview of the system.
+    """
+    context = get_generic_context(request=request)
+    return render(request, 'administration/dashboard.html', context=context)
+
+
+
+@require_superuser
+def restore_staff_member(request, staff_user_id):
+    """Restore a soft-deleted staff member.
+
+    Args:
+        request: The HTTP request object
+        staff_user_id: The ID of the staff member to restore
+
+    Returns:
+        HttpResponse: Redirects to staff list page with success or error message
+    """
+    try:
+        # Get the staff member from all_objects manager (which includes deleted objects)
+        staff_member = StaffMember.all_objects.get(user_id=staff_user_id, is_active=False)
+        
+        # Restore the staff member
+        staff_member.is_active = True
+        staff_member.save()
+        
+        messages.success(request, _("Staff member restored successfully."))
+        return redirect('appointment:staff_list')
+    
+    except StaffMember.DoesNotExist:
+        messages.error(request, _("Staff member not found or already active."))
+        return redirect('appointment:staff_list')

@@ -166,6 +166,23 @@ class StaffMember(models.Model):
         null=True, blank=True,
         help_text=_("Minimum time for an appointment in minutes, recommended 30.")
     )
+    # Add these new fields
+    profile_image = models.ImageField(
+        upload_to='staff_profiles/', 
+        null=True, 
+        blank=True,
+        help_text=_("Profile image of the staff member")
+    )
+    title = models.CharField(
+        max_length=100, 
+        blank=True, 
+        null=True,
+        help_text=_("Staff title (e.g., Master Barber, Hair Stylist)")
+    )
+    # Add soft delete fields
+    is_active = models.BooleanField(default=True, help_text=_("Designates whether this staff member is active"))
+    deleted_at = models.DateTimeField(null=True, blank=True, help_text=_("When this staff member was soft deleted"))
+    # Existing fields continue below...
     lead_time = models.TimeField(
         null=True, blank=True,
         help_text=_("Time when the staff member starts working.")
@@ -274,6 +291,35 @@ class StaffMember(models.Model):
 
     def is_working_day(self, day: int):
         return day not in self.get_non_working_days()
+
+    # Add a method to get the profile image URL
+    def get_profile_image_url(self):
+        if self.profile_image:
+            return self.profile_image.url
+        return None
+
+    # Add custom manager to filter active staff members
+    class StaffMemberManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(is_active=True)
+        
+        def all_with_deleted(self):
+            return super().get_queryset()
+    
+    objects = StaffMemberManager()
+    all_objects = models.Manager()
+    
+    def soft_delete(self):
+        """Soft delete the staff member by setting is_active to False and recording the deletion time."""
+        self.is_active = False
+        self.deleted_at = timezone.now()
+        self.save()
+    
+    def restore(self):
+        """Restore a soft-deleted staff member."""
+        self.is_active = True
+        self.deleted_at = None
+        self.save()
 
 
 class AppointmentRequest(models.Model):

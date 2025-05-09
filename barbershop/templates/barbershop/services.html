@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Our Services - Your Barbershop{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-5">Our Services</h1>
+    
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for service in services %}
+        <div class="col">
+            <div class="card h-100">
+                {% if service.img %}
+                    <img src="{{ service.img.url }}" class="card-img-top" alt="{{ service.name }}">
+                {% else %}
+                    <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="bi bi-scissors" style="font-size: 2rem;"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ service.name }}</h5>
+                    <p class="card-text">{{ service.description }}</p>
+                    <p class="card-text"><strong>Duration:</strong> {{ service.duration|time:"G" }} hour{{ service.duration|time:"G"|pluralize }}</p>
+                    <p class="card-text"><strong>Price:</strong> {{ service.price }}{{ service.currency_icon }}</p>
+                    <a href="/en/appointment/request/{{ service.id }}/" class="btn btn-primary w-100">Book Now</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p>No services available at the moment. Please check back later.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

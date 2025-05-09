@@ -200,3 +200,19 @@ body {
         pointer-events: none; /* Ensures it doesn't interfere with other interactions */
     }
 }
+
+/* Add these styles to your existing CSS */
+.soft-deleted {
+    background-color: #f8f8f8;
+    color: #888;
+}
+
+.status-active {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-inactive {
+    color: #dc3545;
+    font-weight: bold;
+}

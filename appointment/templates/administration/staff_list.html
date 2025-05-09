@@ -37,28 +37,41 @@
                         <tr>
                             <th>{% trans 'Name' %}</th>
                             <th>{% trans 'Email' %}</th>
+                            <th>{% trans 'Status' %}</th>
                             <th>{% trans 'Details' %}</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for staff_member in staff_members %}
-                            <tr>
+                            <tr {% if not staff_member.is_active %}class="soft-deleted"{% endif %}>
                                 <td>{{ staff_member.get_staff_member_name }}</td>
                                 <td>{{ staff_member.user.email|default:"N/A" }}</td>
                                 <td>
+                                    {% if staff_member.is_active %}
+                                        <span class="status-active">{% trans 'Active' %}</span>
+                                    {% else %}
+                                        <span class="status-inactive">{% trans 'Inactive' %}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
                                     <a href="{% url 'appointment:user_profile' staff_member.user.id %}"
                                        class="modify-btn button-color-blue">{% trans 'View Profile' %}</a>
-                                    <a href="{% url 'appointment:remove_staff_member' staff_member.user.id %}"
-                                       class="modify-btn button-color-red">{% trans 'Remove' %}</a>
+                                    {% if staff_member.is_active %}
+                                        <a href="{% url 'appointment:remove_staff_member' staff_member.user.id %}"
+                                           class="modify-btn button-color-red">{% trans 'Deactivate' %}</a>
+                                    {% else %}
+                                        <a href="{% url 'appointment:restore_staff_member' staff_member.user.id %}"
+                                           class="modify-btn button-color-green">{% trans 'Reactivate' %}</a>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="3">{% trans 'No staff members found' %}.</td>
+                                <td colspan="4">{% trans 'No staff members found' %}.</td>
                             </tr>
                         {% endfor %}
                         <small>
-                            {% trans "PS: Remove means, deleting the staff status of the user. The user account is still active." %}
+                            {% trans "PS: Deactivate means setting the staff member to inactive state. The user account and all related data are preserved." %}
                         </small>
                         </tbody>
                     </table>

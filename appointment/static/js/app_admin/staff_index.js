@@ -273,7 +273,12 @@ function setUserStaffAdminFlag() {
             if (data.is_staff_admin) {
                 AppState.isUserStaffAdmin = true;
             } else {
-                console.error(data.message || "Error fetching user details.");
+                // If the user's staff member account is inactive, show a specific error
+                if (data.message === "User's staff member profile has been deactivated. Please contact the administrator.") {
+                    showErrorModal(data.message, "Account Deactivated");
+                } else {
+                    console.error(data.message || "Error fetching user details.");
+                }
                 AppState.isUserStaffAdmin = false;
             }
         })

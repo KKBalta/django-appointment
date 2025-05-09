@@ -45,10 +45,17 @@ def fetch_user_appointments(user):
     if user.is_superuser:
         return get_all_appointments()
     try:
-        staff_member_instance = user.staffmember
+        # Check if the user has an active staff member profile
+        staff_member_instance = StaffMember.objects.get(user=user)
         return get_staff_member_appointment_list(staff_member_instance)
-    except ObjectDoesNotExist:
-        if user.is_staff:
+    except StaffMember.DoesNotExist:
+        # Check if the user has an inactive (soft deleted) staff member profile
+        inactive_staff = StaffMember.all_objects.filter(user=user, is_active=False).first()
+        if inactive_staff:
+            # The user has a staff member record but it's inactive (soft deleted)
+            raise ValueError("User's staff member profile has been deactivated. Please contact the administrator.")
+        elif user.is_staff:
+            # The user is staff but has no staff member record at all
             return []
 
     raise ValueError("User is not a staff member or a superuser")

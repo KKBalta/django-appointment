@@ -1,0 +1,79 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Your Barbershop{% endblock %}</title>
+    
+    <!-- Bootstrap and CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/barbershop-style.css' %}">
+    
+    {% block customCSS %}{% endblock %}
+    {% block extra_css %}{% endblock %}
+    
+    {% block customMetaTag %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/en/barbershop/">The Grand Barber</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/en/barbershop/services/">Services</a></li>
+                    <li class="nav-item dropdown">
+
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/en/barbershop/about/">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/en/barbershop/gallery/">Gallery</a></li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="/appointment/app-admin/">Staff Portal</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        {% block body %}
+            {% block content %}{% endblock %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Location</h5>
+                    <p>123 Main Street<br>Your City, ST 12345</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Hours</h5>
+                    <p>Mon-Fri: 9am - 7pm<br>Sat: 9am - 5pm<br>Sun: Closed</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <p>Phone: (123) 456-7890<br>Email: info@yourbarbershop.com</p>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <p>&copy; 2025 Your Barbershop. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block customJS %}{% endblock %}
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -59,11 +59,42 @@ class StaffMemberForm(forms.ModelForm):
 
 @admin.register(StaffMember)
 class StaffMemberAdmin(admin.ModelAdmin):
-    form = StaffMemberForm
-    list_display = (
-        'get_staff_member_name', 'get_slot_duration', 'lead_time', 'finish_time', 'work_on_saturday', 'work_on_sunday')
-    search_fields = ('user__email', 'user__first_name', 'user__last_name')
-    list_filter = ('work_on_saturday', 'work_on_sunday', 'lead_time', 'finish_time')
+    list_display = ('get_staff_member_name', 'title', 'is_active')
+    search_fields = ('user__first_name', 'user__last_name', 'title')
+    list_filter = ('title', 'is_active')
+    actions = ['soft_delete_staff', 'restore_staff']
+    
+    def get_queryset(self, request):
+        # Show all staff members including soft deleted ones
+        return StaffMember.all_objects.all()
+    
+    fieldsets = (
+        ('Status', {
+            'fields': ('is_active', 'deleted_at')
+        }),
+        ('Personal Information', {
+            'fields': ('user', 'title', 'profile_image')
+        }),
+        ('Services', {
+            'fields': ('services_offered',)
+        }),
+        ('Working Schedule', {
+            'fields': ('slot_duration', 'lead_time', 'finish_time', 
+                      'appointment_buffer_time', 'work_on_saturday', 'work_on_sunday')
+        }),
+    )
+    
+    def soft_delete_staff(self, request, queryset):
+        for staff in queryset:
+            staff.soft_delete()
+        self.message_user(request, f"{queryset.count()} staff members have been soft deleted.")
+    soft_delete_staff.short_description = "Soft delete selected staff members"
+    
+    def restore_staff(self, request, queryset):
+        for staff in queryset:
+            staff.restore()
+        self.message_user(request, f"{queryset.count()} staff members have been restored.")
+    restore_staff.short_description = "Restore selected staff members"
 
 
 @admin.register(DayOff)
